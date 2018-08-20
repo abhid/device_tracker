@@ -1,0 +1,71 @@
+!!!
+%head
+  %title Device Tracker &middot; ARP/FDB
+%body
+  %link{:rel => "stylesheet", :href => "https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css"}
+
+  :css
+    .search:hover {
+      border-bottom: #000 dashed 1px;
+    }
+
+  %form
+    %input#search{:type => "text", :placeholder => "Search by MAC/IP"}
+  %h3 ARP Table
+  %table
+    %thead
+      %tr
+        %td Address
+        %td Age
+        %td MAC
+        %td Type
+        %td Interface
+        %td Switch
+        %td Switch IP
+        %td Switch Serial
+    %tbody
+      - @arp.each do |arp|
+        %tr
+          %td
+            %span.search= arp["address"]
+          %td= arp["age"]
+          %td
+            %span.search= arp["mac"]
+          %td= arp["type"]
+          %td= arp["interface"]
+          %td= arp["switch"]
+          %td= arp["switch_ip"]
+          %td= arp["switch_serial"]
+
+  %h3 FDB
+  %table
+    %thead
+      %tr
+        %td Destination Address
+        %td Type
+        %td VLAN
+        %td Destination Port
+        %td Switch
+        %td Switch IP
+        %td Switch Serial
+    %tbody
+      - @fdb.each do |fdb_entry|
+        %tr
+          %td
+            %span.search= fdb_entry["destination_address"]
+          %td= fdb_entry["type"]
+          %td= fdb_entry["vlan"]
+          %td= fdb_entry["destination_port"]
+          %td= fdb_entry["switch"]
+          %td= fdb_entry["switch_ip"]
+          %td= fdb_entry["switch_serial"]
+  %script{:src => "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"}
+  %script{:src => "https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.4.0/jquery.quicksearch.min.js"}
+  :javascript
+    $(document).ready(function() {
+      $("#search").quicksearch('table tbody tr');
+      $("span.search").click(function() {
+        $("#search").val($(this).html());
+        $('#search').trigger("keyup");
+      })
+    });
