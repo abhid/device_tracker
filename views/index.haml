@@ -16,26 +16,26 @@
     %thead
       %tr
         %td Address
-        %td Age
+        -# %td Age
         %td MAC
         %td Type
         %td Interface
         %td Switch
-        %td Switch IP
-        %td Switch Serial
+        -# %td Switch IP
+        -# %td Switch Serial
     %tbody
       - @arp.each do |arp|
         %tr
           %td
             %span.search= arp["address"]
-          %td= arp["age"]
+          -# %td= arp["age"]
           %td
             %span.search= arp["mac"]
           %td= arp["type"]
           %td= arp["interface"]
           %td= arp["switch"]
-          %td= arp["switch_ip"]
-          %td= arp["switch_serial"]
+          -# %td= arp["switch_ip"]
+          -# %td= arp["switch_serial"]
 
   %h3 FDB
   %table
@@ -63,7 +63,7 @@
   %script{:src => "https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.4.0/jquery.quicksearch.min.js"}
   :javascript
     $(document).ready(function() {
-      $("#search").quicksearch('table tbody tr');
+      $("#search").quicksearch('table tbody tr', {minValLength: 4});
       $("span.search").click(function() {
         $("#search").val($(this).html());
         $('#search').trigger("keyup");

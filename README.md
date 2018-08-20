@@ -20,8 +20,8 @@ This is meant to replace the slow and archaic method of getting this information
 * ntc-templates
 
 ###### Todo
-* Integrate with IOS-XE guestshell (IOX)
-* Export JSON API endpoint
-* Export [Prometheus](https://prometheus.io/docs/instrumenting/exporters) compatible statistics
+[ ] Integrate with IOS-XE guestshell (IOX)
+[ ] Export JSON API endpoint
+[ ] Export [Prometheus](https://prometheus.io/docs/instrumenting/exporters) compatible statistics
 
 The heavy lifting with this project is done by the awesome work from the folks behind the [netmiko](https://github.com/ktbyers/netmiko) and [paramiko](https://github.com/paramiko/paramiko) libraries.
