@@ -28,7 +28,9 @@
         %td{:colspan => 8, :style => "text-align: center; font-weight: 400;"}
           Search for a MAC / IP Address to display the ARP entry
 
-  %h3 FDB
+  %h3
+    FDB
+    %span{:style => "display: inline-block; font-size: 12px; font-weight: 400;"} Needs MAC Address
   %table
     %thead
       %tr
@@ -101,8 +103,8 @@
           $("#fdb_table").empty();
           $("#arp_table").empty();
 
+          $("#arp_table").append("<tr><td colspan='8' style='text-align: center; font-weight: 400;'>Search for a MAC / IP Address to display the ARP entry</td></tr>");
           $("#fdb_table").append("<tr><td colspan='8' style='text-align: center; font-weight: 400;'>Search for a MAC / IP Address to display the FDB entry on the switch</td></tr>");
-          $("#arp_table").append("<tr><td colspan='8' style='text-align: center; font-weight: 400;'>Search for a MAC / IP Address to display the FDB entry on the switch</td></tr>");
         }
       });
 
