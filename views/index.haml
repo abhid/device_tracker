@@ -24,6 +24,9 @@
         %td Switch IP
         %td Switch Serial
     %tbody#arp_table
+      %tr
+        %td{:colspan => 8, :style => "text-align: center; font-weight: 400;"}
+          Search for a MAC / IP Address to display the ARP entry
 
   %h3 FDB
   %table
@@ -37,13 +40,16 @@
         %td Switch IP
         %td Switch Serial
     %tbody#fdb_table
+      %tr
+        %td{:colspan => 8, :style => "text-align: center; font-weight: 400;"}
+          Search for a MAC / IP Address to display the FDB entry on the switch
   %script{:src => "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"}
   %script{:src => "https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"}
   :javascript
     $(document).ready(function() {
-      $("#search").keyup(function() {
+      $("#search").bind('input', function() {
         var searchStr = $(this).val();
-        if (searchStr.length > 0) {
+        if (searchStr.length > 1) {
           $.ajax({
             url: "/arp",
             type: "GET",
@@ -90,10 +96,18 @@
             $("#fdb_table").append(fdb_entries);
           });
         }
+        else {
+          console.log("k")
+          $("#fdb_table").empty();
+          $("#arp_table").empty();
+
+          $("#fdb_table").append("<tr><td colspan='8' style='text-align: center; font-weight: 400;'>Search for a MAC / IP Address to display the FDB entry on the switch</td></tr>");
+          $("#arp_table").append("<tr><td colspan='8' style='text-align: center; font-weight: 400;'>Search for a MAC / IP Address to display the FDB entry on the switch</td></tr>");
+        }
       });
 
       $("tbody").on('click', 'span.search', function() {
         $("#search").val($(this).html());
-        $('#search').trigger("keyup");
+        $('#search').trigger("input");
       });
     });
