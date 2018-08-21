@@ -16,26 +16,14 @@
     %thead
       %tr
         %td Address
-        -# %td Age
+        %td Age
         %td MAC
         %td Type
         %td Interface
         %td Switch
-        -# %td Switch IP
-        -# %td Switch Serial
-    %tbody
-      - @arp.each do |arp|
-        %tr
-          %td
-            %span.search= arp["address"]
-          -# %td= arp["age"]
-          %td
-            %span.search= arp["mac"]
-          %td= arp["type"]
-          %td= arp["interface"]
-          %td= arp["switch"]
-          -# %td= arp["switch_ip"]
-          -# %td= arp["switch_serial"]
+        %td Switch IP
+        %td Switch Serial
+    %tbody#arp_table
 
   %h3 FDB
   %table
@@ -48,24 +36,64 @@
         %td Switch
         %td Switch IP
         %td Switch Serial
-    %tbody
-      - @fdb.each do |fdb_entry|
-        %tr
-          %td
-            %span.search= fdb_entry["destination_address"]
-          %td= fdb_entry["type"]
-          %td= fdb_entry["vlan"]
-          %td= fdb_entry["destination_port"]
-          %td= fdb_entry["switch"]
-          %td= fdb_entry["switch_ip"]
-          %td= fdb_entry["switch_serial"]
+    %tbody#fdb_table
   %script{:src => "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"}
-  %script{:src => "https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.4.0/jquery.quicksearch.min.js"}
+  %script{:src => "https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"}
   :javascript
     $(document).ready(function() {
-      $("#search").quicksearch('table tbody tr', {minValLength: 4});
-      $("span.search").click(function() {
+      $("#search").keyup(function() {
+        var searchStr = $(this).val();
+        if (searchStr.length > 0) {
+          $.ajax({
+            url: "/arp",
+            type: "GET",
+            data: {q: searchStr}
+          }).done(function(data) {
+            // Clear ARP table and add this
+            $("#arp_table").empty();
+            var arp_entries = $();
+            _.each(data, function(entry) {
+              arp_entries = arp_entries.add("<tr><td><span class='search'>" +
+                entry["address"] + "</span></td><td>" +
+                entry["age"] + "</td><td><span class='search'>" +
+                entry["mac"] + "</span></td><td>" +
+                entry["type"] + "</td><td>" +
+                entry["interface"] + "</td><td>" +
+                entry["switch"] + "</td><td>" +
+                entry["switch_ip"] + "</td><td>" +
+                entry["switch_serial"] + "</td><td>" +
+                "</tr>")
+            });
+            $("#arp_table").append(arp_entries);
+
+          });
+
+          $.ajax({
+            url: "/fdb",
+            type: "GET",
+            data: {q: searchStr}
+          }).done(function(data) {
+            // Clear FDB table and add this
+            $("#fdb_table").empty();
+            var fdb_entries = $();
+            _.each(data, function(entry) {
+              fdb_entries = fdb_entries.add("<tr><td><span class='search'>" +
+                entry["destination_address"] + "</span></td><td>" +
+                entry["type"] + "</td><td>" +
+                entry["vlan"] + "</td><td>" +
+                entry["destination_port"] + "</td><td>" +
+                entry["switch"] + "</td><td>" +
+                entry["switch_ip"] + "</td><td>" +
+                entry["switch_serial"] + "</td><td>" +
+                "</tr>")
+            });
+            $("#fdb_table").append(fdb_entries);
+          });
+        }
+      });
+
+      $("tbody").on('click', 'span.search', function() {
         $("#search").val($(this).html());
         $('#search').trigger("keyup");
-      })
+      });
     });
